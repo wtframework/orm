@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WTFramework\ORM\Traits;
 
 use stdClass;
-use WTFramework\ORM\ModelNotFound;
+use WTFramework\ORM\ModelNotFoundException;
 
 trait IsModel
 {
@@ -66,9 +66,9 @@ trait IsModel
 
     $model = static::get(primary_key: $primary_key);
 
-    if (!$model->exists())
+    if (!$model->exists)
     {
-      throw new ModelNotFound;
+      throw new ModelNotFoundException;
     }
 
     return $model;
@@ -97,7 +97,7 @@ trait IsModel
       $this->$column = $value;
     }
 
-    return $this->exists() ? $this->saveUpdate() : $this->saveInsert();
+    return $this->exists ? $this->saveUpdate() : $this->saveInsert();
 
   }
 

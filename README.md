@@ -18,19 +18,19 @@ use WTFramework\ORM\Model
 class User extends Model {}
 ```
 \
-By default the table name will be a pluralized form of the class name in snake case. For example, `class User` will have a table name of `users` and `class UserRole` will have a table name of `user_roles`. If you wish to specify the table name then include a `public const TABLE`.
+By default the table name will be a pluralized form of the class name in snake case. For example, `class UserRole` will have a table name of `user_roles`. If you wish to specify the table name then include a `public const TABLE`.
 ```php
 class User extends Model
 {
-  public const TABLE = 'users';
+  public const TABLE = 'prefix_users';
 }
 ```
 \
-By default the primary key will be the class name in snake case with a suffix of `_id`. For example, `class User` will have a primary key of `user_id` and `class UserRole` will have a primary key of `user_role_id`. If you wish to specify the primary key then include a `public const PRIMARY_KEY`. This may be a string or an array (if a composite primary key).
+By default the primary key will be the class name in snake case with a suffix of `_id`. For example, `class UserRole` will have a primary key of `user_role_id`. If you wish to specify the primary key then include a `public const PRIMARY_KEY`. This may be a string or an array (if a composite primary key).
 ```php
 class User extends Model
 {
-  public const PRIMARY_KEY = 'user_id';
+  public const PRIMARY_KEY = 'id';
 }
 ```
 \
@@ -66,9 +66,14 @@ Use the `exists` method to determine if the record was found.
 $user->exists();
 ```
 \
-Use the `require` static method to select a record and throw a `WTFramework\ORM\ModelNotFound` exception if the record was not found.
+Use the `require` static method to select a record and throw a `WTFramework\ORM\ModelNotFoundException` if the record was not found.
 ```php
 $user = User::require(1);
+
+$user = User::require([
+  'id1' => 1,
+  'id2' => 2,
+]);
 ```
 
 ### Update a record

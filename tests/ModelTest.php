@@ -12,7 +12,7 @@ use WTFramework\DBAL\Statements\Select;
 use WTFramework\DBAL\Statements\Truncate;
 use WTFramework\DBAL\Statements\Update;
 use WTFramework\ORM\Model;
-use WTFramework\ORM\ModelNotFound;
+use WTFramework\ORM\ModelNotFoundException;
 
 it('can instantiate new model', function ()
 {
@@ -103,7 +103,7 @@ it('can fail to require record', function ()
   Test::require(1);
 
 })
-->throws(ModelNotFound::class);
+->throws(ModelNotFoundException::class);
 
 it('can get connection', function ()
 {
@@ -308,7 +308,7 @@ it('can fail to require fresh record', function ()
   $test->fresh(require: true);
 
 })
-->throws(ModelNotFound::class);
+->throws(ModelNotFoundException::class);
 
 it('can refresh record', function ()
 {
@@ -360,4 +360,4 @@ it('can fail to require refreshed record', function ()
   $test->refresh(require: true);
 
 })
-->throws(ModelNotFound::class);
+->throws(ModelNotFoundException::class);

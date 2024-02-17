@@ -6,4 +6,4 @@ namespace WTFramework\ORM;
 
 use Exception;
 
-class ModelNotFound extends Exception {}
+class ModelNotFoundException extends Exception {}
