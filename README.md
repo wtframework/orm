@@ -117,3 +117,67 @@ User::update();
 User::delete();
 User::truncate();
 ```
+
+### Relationships
+The ORM allows for creating `belongs to`, `has one`, and `has many` relationships.
+```php
+use WTFramework\ORM\Model;
+use WTFramework\ORM\Relationships\BelongsTo;
+use WTFramework\ORM\Relationships\Has;
+use WTFramework\ORM\Relationships\HasMany;
+
+class User extends Model
+{
+
+  public function role(): BelongsTo
+  {
+    return $this->belongsTo(UserRole::class);
+  }
+
+  public function profile(): Has
+  {
+    return $this->has(Profile::class);
+  }
+
+  public function revisions(): HasMany
+  {
+    return $this->hasMany(UserRevision::class);
+  }
+
+}
+```
+\
+By default the records will be retrieved using the models' primary keys. If you require the relationships to use different column names then you can pass them as additional parameters.
+```php
+class User extends Model
+{
+
+  public const PRIMARY_KEY = 'id';
+
+  public function role(): BelongsTo
+  {
+    return $this->belongsTo(UserRole::class, local_key: "role_id");
+  }
+
+  public function profile(): Has
+  {
+    return $this->has(Profile::class, foreign_key: "user_id");
+  }
+
+  public function revisions(): HasMany
+  {
+    return $this->hasMany(UserRevision::class, foreign_key: "user_id");
+  }
+
+}
+```
+\
+Use the relationship method name as a property to return the result of the relationship.
+```php
+$role = $user->role->name;
+```
+\
+If you call the relationship method directly then it will return an instance of `WTFramework\ORM\Query` allowing you to manipulate the results further.
+```php
+$revisions = $user->revisions()->orderBy('created')->all();
+```

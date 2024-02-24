@@ -6,15 +6,18 @@ namespace WTFramework\ORM\Traits;
 
 use stdClass;
 use WTFramework\ORM\ModelNotFoundException;
+use WTFramework\ORM\Relationships\Relationship;
 
 trait IsModel
 {
 
   use ExtendsDB;
+  use HasRelationships;
 
   public const SEQUENCE_NAME = null;
 
   protected stdClass $data;
+  protected array $cache = [];
 
   public function __construct(
     stdClass|array $data = [],
@@ -197,6 +200,15 @@ trait IsModel
 
   }
 
+  public function clearCache(): static
+  {
+
+    $this->cache = [];
+
+    return $this;
+
+  }
+
   protected function methodName(string $name): string
   {
 
@@ -232,6 +244,22 @@ trait IsModel
     {
       return $this->data->$name ?? null;
     }
+
+    if (!isset($this->cache[$method_name]))
+    {
+      $response = $this->$method_name();
+    }
+
+    return $this->cache[$method_name] ??= match (true)
+    {
+
+      $response instanceof Relationship,
+        => $this->relationships[$method_name] ?? $response->load(),
+
+      default
+        => $response,
+
+    };
 
   }
 
