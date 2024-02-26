@@ -13,7 +13,7 @@ composer require wtframework/orm
 
 Create a new model by extending the `WTFramework\ORM\Model` class.
 ```php
-use WTFramework\ORM\Model
+use WTFramework\ORM\Model;
 
 class User extends Model {}
 ```
@@ -22,7 +22,7 @@ By default the table name will be a pluralized form of the class name in snake c
 ```php
 class User extends Model
 {
-  public const TABLE = 'prefix_users';
+  public const TABLE = 'x_users';
 }
 ```
 \
@@ -116,4 +116,98 @@ User::replace();
 User::update();
 User::delete();
 User::truncate();
+```
+
+### Relationships
+The ORM allows for creating `belongs to`, `has one`, and `has many` relationships.
+```php
+use WTFramework\ORM\Model;
+use WTFramework\ORM\Relationships\BelongsTo;
+use WTFramework\ORM\Relationships\Has;
+use WTFramework\ORM\Relationships\HasMany;
+
+class User extends Model
+{
+
+  public function role(): BelongsTo
+  {
+    return $this->belongsTo(UserRole::class);
+  }
+
+  public function profile(): Has
+  {
+    return $this->has(Profile::class);
+  }
+
+  public function revisions(): HasMany
+  {
+    return $this->hasMany(UserRevision::class);
+  }
+
+}
+```
+\
+By default the records will be retrieved using the models' primary keys. If you require the relationships to use different column names then you can pass them as additional parameters.
+```php
+class User extends Model
+{
+
+  public const PRIMARY_KEY = 'id';
+
+  public function role(): BelongsTo
+  {
+    return $this->belongsTo(UserRole::class, local_key: "role_id");
+  }
+
+  public function profile(): Has
+  {
+    return $this->has(Profile::class, foreign_key: "user_id");
+  }
+
+  public function revisions(): HasMany
+  {
+    return $this->hasMany(UserRevision::class, foreign_key: "user_id");
+  }
+
+}
+```
+\
+Use the relationship method name as a property to return the result of the relationship.
+```php
+$role = $user->role->name;
+```
+\
+When relationships are retrieved this way they will be cached. Use the `clearCache` method to clear the cache.
+```php
+$user->clearCache();
+```
+\
+If you call the relationship method directly then it will return an instance of `WTFramework\ORM\Query` allowing you to manipulate the results further.
+```php
+$revisions = $user->revisions()->orderBy('created')->all();
+```
+\
+By default relationships will be lazy loaded. This can lead to an N+1 query problem. To eager load the relationship you can call the `eager` method, passing in a string or an array of relationship names to eager load.
+```php
+User::eager('revisions')->all();
+```
+\
+You may also eager load by default by setting the `public const EAGER` array.
+```php
+class User extends Model
+{
+
+  public const EAGER = ['revisions'];
+
+  public function revisions(): HasMany
+  {
+    return $this->hasMany(UserRevision::class);
+  }
+
+}
+```
+\
+When a relationship is eager loaded by default you can override this by calling the `lazy` method.
+```php
+User::lazy('revisions')->where('user_id', 1)->get();
 ```
