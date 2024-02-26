@@ -36,6 +36,8 @@ it('can query model and get result', function ()
 
   insert('tests', [1]);
 
+  create('t3s', 'test_id');
+
   $test = Test::where('test_id', 1)->get();
 
   expect($test)
@@ -52,6 +54,8 @@ it('can query model and get array of results', function ()
   create('tests', 'test_id');
 
   insert('tests', [[1], [2]]);
+
+  create('t3s', 'test_id');
 
   $tests = Test::orderBy('test_id')->all();
 

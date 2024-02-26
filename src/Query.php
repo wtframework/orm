@@ -7,6 +7,7 @@ namespace WTFramework\ORM;
 use BadMethodCallException;
 use Closure;
 use WTFramework\DBAL\Statements\Select;
+use WTFramework\ORM\Relationships\Eager;
 use WTFramework\SQL\Interfaces\HasBindings;
 use WTFramework\SQL\Services\Outfile;
 
@@ -116,14 +117,37 @@ use WTFramework\SQL\Services\Outfile;
 class Query
 {
 
+  public readonly Eager $eager;
+
   public function __construct(
     public readonly Select $stmt,
     public readonly string $model
-  ) {}
+  )
+  {
+    $this->eager = new Eager($model);
+  }
 
   private function unprepared(): void {}
   private function prepare(): void {}
   private function execute(): void {}
+
+  public function eager(string|array $relationship): static
+  {
+
+    $this->eager->add(relationship: $relationship);
+
+    return $this;
+
+  }
+
+  public function lazy(string|array $relationship): static
+  {
+
+    $this->eager->lazy(relationship: $relationship);
+
+    return $this;
+
+  }
 
   public function get(): Model
   {
@@ -132,6 +156,8 @@ class Query
       data: ($exists = $this->stmt->get()) ?: [],
       exists: !!$exists
     );
+
+    $this->eager->load(rows: [$row]);
 
     return $row;
 
@@ -146,6 +172,8 @@ class Query
     {
       $rows[] = new $this->model($data, exists: true);
     }
+
+    $this->eager->load(rows: $rows);
 
     return $rows;
 

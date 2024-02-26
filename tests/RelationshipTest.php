@@ -6,6 +6,7 @@ use Test\T1;
 use Test\T2;
 use Test\T3;
 use Test\Test;
+use WTFramework\DBAL\DB;
 use WTFramework\ORM\Relationships\BelongsTo;
 use WTFramework\ORM\Relationships\Has;
 use WTFramework\ORM\Relationships\HasMany;
@@ -253,5 +254,69 @@ it('can clear cache', function ()
 
   expect(count($t3s))
   ->toBe(0);
+
+});
+
+it('can eager load relationships', function ()
+{
+
+  create('tests', 'test_id');
+
+  insert('tests', [[1], [2]]);
+
+  create('t2s', 'test_id');
+
+  insert('t2s',  [[1], [2]]);
+
+  create('t3s', 'test_id');
+
+  insert('t3s',  [[1], [2]]);
+
+  DB::clearLogs();
+
+  foreach (Test::eager('t2')->all() as $test)
+  {
+
+    expect($test->t2->test_id)
+    ->toBe($test->test_id);
+
+  }
+
+  expect(DB::logs())
+  ->toBe([
+    ["SELECT * FROM tests", []],
+    ["SELECT * FROM t3s WHERE t3s.test_id IN (1, 2)", []],
+    ["SELECT * FROM t2s WHERE t2s.test_id IN (1, 2)", []],
+  ]);
+
+});
+
+it('can lazy load relationships', function ()
+{
+
+  create('tests', 'test_id');
+
+  insert('tests', [[1], [2]]);
+
+  create('t2s', 'test_id');
+
+  insert('t2s',  [[1], [2]]);
+
+  DB::clearLogs();
+
+  foreach (Test::lazy('t3')->all() as $test)
+  {
+
+    expect($test->t2->test_id)
+    ->toBe($test->test_id);
+
+  }
+
+  expect(DB::logs())
+  ->toBe([
+    ["SELECT * FROM tests", []],
+    ["SELECT * FROM t2s WHERE test_id = 1 LIMIT 1", []],
+    ["SELECT * FROM t2s WHERE test_id = 2 LIMIT 1", []],
+  ]);
 
 });

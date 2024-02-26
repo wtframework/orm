@@ -13,7 +13,7 @@ composer require wtframework/orm
 
 Create a new model by extending the `WTFramework\ORM\Model` class.
 ```php
-use WTFramework\ORM\Model
+use WTFramework\ORM\Model;
 
 class User extends Model {}
 ```
@@ -22,7 +22,7 @@ By default the table name will be a pluralized form of the class name in snake c
 ```php
 class User extends Model
 {
-  public const TABLE = 'prefix_users';
+  public const TABLE = 'x_users';
 }
 ```
 \
@@ -177,7 +177,37 @@ Use the relationship method name as a property to return the result of the relat
 $role = $user->role->name;
 ```
 \
+When relationships are retrieved this way they will be cached. Use the `clearCache` method to clear the cache.
+```php
+$user->clearCache();
+```
+\
 If you call the relationship method directly then it will return an instance of `WTFramework\ORM\Query` allowing you to manipulate the results further.
 ```php
 $revisions = $user->revisions()->orderBy('created')->all();
+```
+\
+By default relationships will be lazy loaded. This can lead to an N+1 query problem. To eager load the relationship you can call the `eager` method, passing in a string or an array of relationship names to eager load.
+```php
+User::eager('revisions')->all();
+```
+\
+You may also eager load by default by setting the `public const EAGER` array.
+```php
+class User extends Model
+{
+
+  public const EAGER = ['revisions'];
+
+  public function revisions(): HasMany
+  {
+    return $this->hasMany(UserRevision::class);
+  }
+
+}
+```
+\
+When a relationship is eager loaded by default you can override this by calling the `lazy` method.
+```php
+User::lazy('revisions')->where('user_id', 1)->get();
 ```

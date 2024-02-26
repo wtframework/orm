@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace WTFramework\ORM\Traits;
 
+use WTFramework\ORM\Model;
 use WTFramework\ORM\Relationships\BelongsTo;
 use WTFramework\ORM\Relationships\Has;
 use WTFramework\ORM\Relationships\HasMany;
 
 trait HasRelationships
 {
+
+  public const EAGER = [];
+
+  protected array $relationships = [];
 
   protected function belongsTo(
     string $foreign_table,
@@ -57,6 +62,14 @@ trait HasRelationships
       foreign_key: (array) ($foreign_key ?? $this::primaryKey())
     );
 
+  }
+
+  public function addRelationship(
+    string $name,
+    Model|array $rows = null
+  ): void
+  {
+    $this->relationships[$name] = $rows;
   }
 
 }

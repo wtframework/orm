@@ -12,6 +12,8 @@ use WTFramework\ORM\Relationships\HasMany;
 class Test extends Model
 {
 
+  public const EAGER = ['t3'];
+
   public function t1(
     string|array $local_key = null,
     string|array $foreign_key = null

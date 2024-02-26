@@ -25,6 +25,17 @@ abstract class Relationship extends Query
 
   abstract public function lazyWhere(): static;
 
+  public function eagerKey(int $i = 0): string
+  {
+
+    return sprintf(
+      '%s.%s',
+      $this->foreign_table::table(),
+      $this->foreign_key[$i]
+    );
+
+  }
+
   public function load(): Model|array
   {
     return $this->lazyWhere()->{static::LOAD}();
