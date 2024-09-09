@@ -56,6 +56,27 @@ function createWithName(
 
 }
 
+function createPivot(
+  string $table,
+  array $primary_key
+): void
+{
+
+  DB::drop()->table($table)->ifExists()();
+
+  $stmt = DB::create()
+  ->table($table)
+  ->primaryKey($primary_key);
+
+  foreach ($primary_key as $column)
+  {
+    $stmt->column(DB::column($column)->integer());
+  }
+
+  $stmt();
+
+}
+
 function insert(
   string $table,
   array $values

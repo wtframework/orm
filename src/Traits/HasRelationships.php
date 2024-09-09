@@ -8,6 +8,7 @@ use WTFramework\ORM\Model;
 use WTFramework\ORM\Relationships\BelongsTo;
 use WTFramework\ORM\Relationships\Has;
 use WTFramework\ORM\Relationships\HasMany;
+use WTFramework\ORM\Relationships\HasManyThrough;
 
 trait HasRelationships
 {
@@ -60,6 +61,28 @@ trait HasRelationships
       local_key: (array) ($local_key ?? $this::primaryKey()),
       foreign_table: $foreign_table,
       foreign_key: (array) ($foreign_key ?? $this::primaryKey())
+    );
+
+  }
+
+  protected function hasManyThrough(
+    string $foreign_table,
+    string $pivot_table,
+    string|array $foreign_key = null,
+    string|array $local_key = null,
+    string|array $pivot_foreign_key = null,
+    string|array $pivot_local_key = null
+  ): HasManyThrough
+  {
+
+    return new HasManyThrough(
+      local_table: $this,
+      local_key: (array) ($local_key ??= $this::primaryKey()),
+      foreign_table: $foreign_table,
+      foreign_key: (array) ($foreign_key ??= $foreign_table::primaryKey()),
+      pivot_table: $pivot_table,
+      pivot_local_key: (array) ($pivot_local_key ?? $local_key),
+      pivot_foreign_key: (array) ($pivot_foreign_key ?? $foreign_key)
     );
 
   }

@@ -119,12 +119,13 @@ User::truncate();
 ```
 
 ### Relationships
-The ORM allows for creating `belongs to`, `has one`, and `has many` relationships.
+The ORM allows for creating `belongs to`, `has one`, `has many`. and `has many through` relationships.
 ```php
 use WTFramework\ORM\Model;
 use WTFramework\ORM\Relationships\BelongsTo;
 use WTFramework\ORM\Relationships\Has;
 use WTFramework\ORM\Relationships\HasMany;
+use WTFramework\ORM\Relationships\HasManyThrough;
 
 class User extends Model
 {
@@ -144,6 +145,11 @@ class User extends Model
     return $this->hasMany(UserRevision::class);
   }
 
+  public function permissions(): HasManyThrough
+  {
+    return $this->hasManyThrough(Permission::class, UserPermission::class);
+  }
+
 }
 ```
 \
@@ -156,17 +162,22 @@ class User extends Model
 
   public function role(): BelongsTo
   {
-    return $this->belongsTo(UserRole::class, local_key: "role_id");
+    return $this->belongsTo(UserRole::class, local_key: 'role_id');
   }
 
   public function profile(): Has
   {
-    return $this->has(Profile::class, foreign_key: "user_id");
+    return $this->has(Profile::class, foreign_key: 'user_id');
   }
 
   public function revisions(): HasMany
   {
-    return $this->hasMany(UserRevision::class, foreign_key: "user_id");
+    return $this->hasMany(UserRevision::class, foreign_key: 'user_id');
+  }
+
+  public function permissions(): HasManyThrough
+  {
+    return $this->hasManyThrough(Permission::class, UserPermission::class, foreign_key: 'permission_id', pivot_local_key: 'user_id');
   }
 
 }
