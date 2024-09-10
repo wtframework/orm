@@ -48,16 +48,16 @@
         },
         {
             "name": "wtframework/dbal",
-            "version": "v0.2.2",
+            "version": "v0.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wtframework/dbal.git",
-                "reference": "e57d95d9cf91f6c5b5973d33d795031007f67551"
+                "reference": "63354516e5a2441def983b087cb69389747d9c2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wtframework/dbal/zipball/e57d95d9cf91f6c5b5973d33d795031007f67551",
-                "reference": "e57d95d9cf91f6c5b5973d33d795031007f67551",
+                "url": "https://api.github.com/repos/wtframework/dbal/zipball/63354516e5a2441def983b087cb69389747d9c2e",
+                "reference": "63354516e5a2441def983b087cb69389747d9c2e",
                 "shasum": ""
             },
             "require": {
@@ -81,22 +81,22 @@
             "description": "What the Framework?! DBAL",
             "support": {
                 "issues": "https://github.com/wtframework/dbal/issues",
-                "source": "https://github.com/wtframework/dbal/tree/v0.2.2"
+                "source": "https://github.com/wtframework/dbal/tree/v0.2.4"
             },
-            "time": "2024-09-06T04:26:39+00:00"
+            "time": "2024-09-10T17:31:23+00:00"
         },
         {
             "name": "wtframework/sql",
-            "version": "v0.2.3",
+            "version": "v0.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wtframework/sql.git",
-                "reference": "2a0e619b4b6d79031f9e24250b6f7e0ea004b110"
+                "reference": "7a6ccd1e2de5e33fe9238408c2e9058a299399b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wtframework/sql/zipball/2a0e619b4b6d79031f9e24250b6f7e0ea004b110",
-                "reference": "2a0e619b4b6d79031f9e24250b6f7e0ea004b110",
+                "url": "https://api.github.com/repos/wtframework/sql/zipball/7a6ccd1e2de5e33fe9238408c2e9058a299399b2",
+                "reference": "7a6ccd1e2de5e33fe9238408c2e9058a299399b2",
                 "shasum": ""
             },
             "require": {
@@ -118,9 +118,9 @@
             "description": "What the Framework?! SQL",
             "support": {
                 "issues": "https://github.com/wtframework/sql/issues",
-                "source": "https://github.com/wtframework/sql/tree/v0.2.3"
+                "source": "https://github.com/wtframework/sql/tree/v0.2.6"
             },
-            "time": "2024-09-09T12:36:53+00:00"
+            "time": "2024-09-10T17:18:54+00:00"
         }
     ],
     "packages-dev": [

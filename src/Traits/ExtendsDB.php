@@ -27,32 +27,32 @@ trait ExtendsDB
 
   public static function delete(): Delete
   {
-    return static::connection()->delete()->from(static::table());
+    return static::connection()->delete(static::table());
   }
 
   public static function insert(): Insert
   {
-    return static::connection()->insert()->into(static::table());
+    return static::connection()->insert(static::table());
   }
 
   public static function replace(): Replace
   {
-    return static::connection()->replace()->into(static::table());
+    return static::connection()->replace(static::table());
   }
 
   public static function select(): Select
   {
-    return static::connection()->select()->from(static::table());
+    return static::connection()->select(static::table());
   }
 
   public static function truncate(): Truncate
   {
-    return static::connection()->truncate()->table(static::table());
+    return static::connection()->truncate(static::table());
   }
 
   public static function update(): Update
   {
-    return static::connection()->update()->table(static::table());
+    return static::connection()->update(static::table());
   }
 
 }
