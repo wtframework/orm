@@ -368,6 +368,28 @@ it('can clear cache', function ()
 
 });
 
+it('can clear cache on refresh', function ()
+{
+
+  create('t3s', 'test_id');
+
+  insert('t3s', [1]);
+
+  $test = Test::require(1);
+
+  $test->t3;
+
+  create('t3s', 'test_id');
+
+  $test->refresh();
+
+  $t3s = $test->t3;
+
+  expect(count($t3s))
+  ->toBe(0);
+
+});
+
 it('can eager load relationships', function ()
 {
 

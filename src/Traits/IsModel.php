@@ -171,6 +171,8 @@ trait IsModel
       $this->data->$column = $value;
     }
 
+    $this->clearCache();
+
     return $this;
 
   }
