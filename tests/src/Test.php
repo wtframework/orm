@@ -58,4 +58,9 @@ class Test extends Model
 
   }
 
+  public function upperName(string $name): void
+  {
+    $this->name = strtoupper($name);
+  }
+
 }
