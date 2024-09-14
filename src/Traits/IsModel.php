@@ -40,27 +40,12 @@ trait IsModel
   public static function get(int|string|array $primary_key): static
   {
 
-    $stmt = static::select();
+    $record = static::select()->where(array_combine(
+      (array) static::primaryKey(),
+      (array) $primary_key
+    ))->get();
 
-    if (!is_array($primary_key))
-    {
-      $primary_key = [static::primaryKey() => $primary_key];
-    }
-
-    foreach ($primary_key as $column => $value)
-    {
-
-      $stmt->where(
-        column: $column,
-        value: $value
-      );
-
-    }
-
-    return new static(
-      data: ($exists = $stmt->get()) ?: [],
-      exists: !!$exists
-    );
+    return new static($record ?: [], !!$record);
 
   }
 
@@ -148,22 +133,12 @@ trait IsModel
 
       if (in_array($column, $primary_key))
       {
-
-        $stmt->where(
-          column: $column,
-          value: $value
-        );
-
+        $stmt->where($column, $value);
       }
 
       else
       {
-
-        $stmt->set(
-          column: $column,
-          value: $value
-        );
-
+        $stmt->set($column, $value);
       }
 
     }

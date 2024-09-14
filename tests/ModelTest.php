@@ -44,8 +44,8 @@ it('can set column value', function ()
 
   $test->test_id = 1;
 
-  expect($test->data()->test_id)
-  ->toBe($test->test_id);
+  expect($test->test_id)
+  ->toBe(1);
 
 });
 
