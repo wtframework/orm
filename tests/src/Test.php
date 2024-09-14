@@ -9,6 +9,7 @@ use WTFramework\ORM\Relationships\BelongsTo;
 use WTFramework\ORM\Relationships\Has;
 use WTFramework\ORM\Relationships\HasMany;
 use WTFramework\ORM\Relationships\HasManyThrough;
+use WTFramework\ORM\Relationships\HasThrough;
 
 class Test extends Model
 {
@@ -40,6 +41,25 @@ class Test extends Model
   }
 
   public function pivot(
+    string|array $foreign_key = null,
+    string|array $local_key = null,
+    string|array $pivot_foreign_key = null,
+    string|array $pivot_local_key = null
+  ): HasThrough
+  {
+
+    return $this->hasThrough(
+      T3::class,
+      Pivot::class,
+      $foreign_key,
+      $local_key,
+      $pivot_foreign_key,
+      $pivot_local_key
+    );
+
+  }
+
+  public function pivotMany(
     string|array $foreign_key = null,
     string|array $local_key = null,
     string|array $pivot_foreign_key = null,

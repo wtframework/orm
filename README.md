@@ -119,13 +119,14 @@ User::truncate();
 ```
 
 ### Relationships
-The ORM allows for creating `belongs to`, `has one`, `has many`. and `has many through` relationships.
+The ORM allows for creating `belongs to`, `has`, `has many`, `has through`, and `has many through` relationships.
 ```php
 use WTFramework\ORM\Model;
 use WTFramework\ORM\Relationships\BelongsTo;
 use WTFramework\ORM\Relationships\Has;
 use WTFramework\ORM\Relationships\HasMany;
 use WTFramework\ORM\Relationships\HasManyThrough;
+use WTFramework\ORM\Relationships\HasThrough;
 
 class User extends Model
 {
@@ -143,6 +144,11 @@ class User extends Model
   public function revisions(): HasMany
   {
     return $this->hasMany(UserRevision::class);
+  }
+
+  public function owner(): HasOneThrough
+  {
+    return $this->hasOneThrough(Owner::class, UserOwner::class);
   }
 
   public function permissions(): HasManyThrough
@@ -173,6 +179,11 @@ class User extends Model
   public function revisions(): HasMany
   {
     return $this->hasMany(UserRevision::class, foreign_key: 'user_id');
+  }
+
+  public function owner(): HasOneThrough
+  {
+    return $this->hasOneThrough(Owner::class, UserOwner::class, foreign_key: 'owner_id', pivot_local_key: 'user_id');
   }
 
   public function permissions(): HasManyThrough

@@ -11,6 +11,7 @@ use WTFramework\ORM\Relationships\BelongsTo;
 use WTFramework\ORM\Relationships\Has;
 use WTFramework\ORM\Relationships\HasMany;
 use WTFramework\ORM\Relationships\HasManyThrough;
+use WTFramework\ORM\Relationships\HasThrough;
 
 it('can get belongs to relationship', function ()
 {
@@ -216,12 +217,110 @@ it('can get has many relationship result', function ()
 
 });
 
+it('can get has through relationship', function ()
+{
+
+  $test = Test::require(1);
+
+  $has_through = $test->pivot();
+
+  expect($has_through)
+  ->toBeInstanceOf(HasThrough::class);
+
+  expect((string) $has_through)
+  ->toBe("SELECT t3s.* FROM t3s JOIN pivots ON t3s.t3_id = pivots.t3_id WHERE pivots.test_id = 1 LIMIT 1");
+
+});
+
+it('can get has through relationship overriding foreign key', function ()
+{
+
+  $test = Test::require(1);
+
+  $has_many_through = $test->pivot(foreign_key: "id");
+
+  expect($has_many_through)
+  ->toBeInstanceOf(HasThrough::class);
+
+  expect((string) $has_many_through)
+  ->toBe("SELECT t3s.* FROM t3s JOIN pivots ON t3s.id = pivots.id WHERE pivots.test_id = 1 LIMIT 1");
+
+});
+
+it('can get has through relationship overriding local key', function ()
+{
+
+  $test = Test::require(1);
+
+  $test->id = 2;
+
+  $has_many_through = $test->pivot(local_key: "id");
+
+  expect($has_many_through)
+  ->toBeInstanceOf(HasThrough::class);
+
+  expect((string) $has_many_through)
+  ->toBe("SELECT t3s.* FROM t3s JOIN pivots ON t3s.t3_id = pivots.t3_id WHERE pivots.id = 2 LIMIT 1");
+
+});
+
+it('can get has through relationship overriding pivot foreign key', function ()
+{
+
+  $test = Test::require(1);
+
+  $has_many_through = $test->pivot(pivot_foreign_key: "id");
+
+  expect($has_many_through)
+  ->toBeInstanceOf(HasThrough::class);
+
+  expect((string) $has_many_through)
+  ->toBe("SELECT t3s.* FROM t3s JOIN pivots ON t3s.t3_id = pivots.id WHERE pivots.test_id = 1 LIMIT 1");
+
+});
+
+it('can get has through relationship overriding pivot local key', function ()
+{
+
+  $test = Test::require(1);
+
+  $has_many_through = $test->pivot(pivot_local_key: "id");
+
+  expect($has_many_through)
+  ->toBeInstanceOf(HasThrough::class);
+
+  expect((string) $has_many_through)
+  ->toBe("SELECT t3s.* FROM t3s JOIN pivots ON t3s.t3_id = pivots.t3_id WHERE pivots.id = 1 LIMIT 1");
+
+});
+
+it('can get has through relationship result', function ()
+{
+
+  create('t3s', 't3_id');
+
+  insert('t3s', [1]);
+
+  createPivot('pivots', ['test_id', 't3_id']);
+
+  insert('pivots', [1, 1]);
+
+  $test = Test::require(1);
+
+  expect($t3 = $test->pivot)
+  ->toBeInstanceOf(T3::class);
+
+  expect($t3->t3_id)
+  ->toBe(1);
+
+});
+
 it('can get has many through relationship', function ()
 {
 
   $test = Test::require(1);
 
-  $has_many_through = $test->pivot();
+  $has_many_through = $test->pivotMany();
 
   expect($has_many_through)
   ->toBeInstanceOf(HasManyThrough::class);
@@ -236,7 +335,7 @@ it('can get has many through relationship overriding foreign key', function ()
 
   $test = Test::require(1);
 
-  $has_many_through = $test->pivot(foreign_key: "id");
+  $has_many_through = $test->pivotMany(foreign_key: "id");
 
   expect($has_many_through)
   ->toBeInstanceOf(HasManyThrough::class);
@@ -253,7 +352,7 @@ it('can get has many through relationship overriding local key', function ()
 
   $test->id = 2;
 
-  $has_many_through = $test->pivot(local_key: "id");
+  $has_many_through = $test->pivotMany(local_key: "id");
 
   expect($has_many_through)
   ->toBeInstanceOf(HasManyThrough::class);
@@ -268,7 +367,7 @@ it('can get has many through relationship overriding pivot foreign key', functio
 
   $test = Test::require(1);
 
-  $has_many_through = $test->pivot(pivot_foreign_key: "id");
+  $has_many_through = $test->pivotMany(pivot_foreign_key: "id");
 
   expect($has_many_through)
   ->toBeInstanceOf(HasManyThrough::class);
@@ -283,7 +382,7 @@ it('can get has many through relationship overriding pivot local key', function 
 
   $test = Test::require(1);
 
-  $has_many_through = $test->pivot(pivot_local_key: "id");
+  $has_many_through = $test->pivotMany(pivot_local_key: "id");
 
   expect($has_many_through)
   ->toBeInstanceOf(HasManyThrough::class);
@@ -306,7 +405,7 @@ it('can get has many through relationship result', function ()
 
   $test = Test::require(1);
 
-  expect($t3s = $test->pivot)
+  expect($t3s = $test->pivot_many)
   ->toBeArray();
 
   expect(count($t3s))
