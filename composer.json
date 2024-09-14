@@ -4,7 +4,7 @@
   "license": "MIT",
   "require": {
     "php": "^8.2",
-    "wtframework/dbal": "^0.2"
+    "wtframework/dbal": "^0.3"
   },
   "autoload": {
     "psr-4": {
@@ -12,7 +12,7 @@
     }
   },
   "require-dev": {
-    "pestphp/pest": "^2.30"
+    "pestphp/pest": "^3.0"
   },
   "autoload-dev": {
     "psr-4": {

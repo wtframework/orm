@@ -45,6 +45,10 @@ use WTFramework\SQL\Services\Outfile;
  * @method static Query orHavingExists(string|HasBindings $subquery)
  * @method static Query havingNotExists(string|HasBindings $subquery)
  * @method static Query orHavingNotExists(string|HasBindings $subquery)
+ * @method static Query havingRaw(string $condition, string|int|float|array $bindings = [])
+ * @method static Query orHavingRaw(string $condition, string|int|float|array $bindings = [])
+ * @method static Query havingNotRaw(string $condition, string|int|float|array $bindings = [])
+ * @method static Query orHavingNotRaw(string $condition, string|int|float|array $bindings = [])
  * @method static Query highPriority()
  * @method static Query into(string|HasBindings|array $table)
  * @method static Query intoDumpfile(string $path)
@@ -106,6 +110,10 @@ use WTFramework\SQL\Services\Outfile;
  * @method static Query orWhereExists(string|HasBindings $subquery)
  * @method static Query whereNotExists(string|HasBindings $subquery)
  * @method static Query orWhereNotExists(string|HasBindings $subquery)
+ * @method static Query whereRaw(string $condition, string|int|float|array $bindings = [])
+ * @method static Query orWhereRaw(string $condition, string|int|float|array $bindings = [])
+ * @method static Query whereNotRaw(string $condition, string|int|float|array $bindings = [])
+ * @method static Query orWhereNotRaw(string $condition, string|int|float|array $bindings = [])
  * @method static Query whereCurrentOf(string $cursor_name)
  * @method static Query window(string|array $name, string|HasBindings $spec = null)
  * @method static Query with(string|HasBindings|array $cte)
@@ -119,12 +127,7 @@ trait CanQuery
 
   public static function query(): Query
   {
-
-    return new Query(
-      stmt: static::select(),
-      model: static::class
-    );
-
+    return new Query(static::select(), static::class);
   }
 
   public static function __callStatic(

@@ -20,16 +20,15 @@ function create(
 ): void
 {
 
-  DB::drop()->table($table)->ifExists()();
+  DB::drop($table)->ifExists()();
 
-  DB::create()
-  ->table($table)
-  ->column(
-    DB::column($primary_key)
-    ->integer()
-    ->primaryKey()
-    ->autoIncrement()
-  )();
+  $table = DB::create($table);
+
+  $table->integer($primary_key)
+  ->primaryKey()
+  ->autoIncrement();
+
+  $table();
 
 }
 
@@ -39,20 +38,17 @@ function createWithName(
 ): void
 {
 
-  DB::drop()->table($table)->ifExists()();
+  DB::drop($table)->ifExists()();
 
-  DB::create()
-  ->table($table)
-  ->column(
-    DB::column($primary_key)
-    ->integer()
-    ->primaryKey()
-    ->autoIncrement()
-  )
-  ->column(
-    DB::column('name')
-    ->varchar()
-  )();
+  $table = DB::create($table);
+
+  $table->integer($primary_key)
+  ->primaryKey()
+  ->autoIncrement();
+
+  $table->varchar('name');
+
+  $table();
 
 }
 
@@ -62,18 +58,17 @@ function createPivot(
 ): void
 {
 
-  DB::drop()->table($table)->ifExists()();
+  DB::drop($table)->ifExists()();
 
-  $stmt = DB::create()
-  ->table($table)
+  $table = DB::create($table)
   ->primaryKey($primary_key);
 
   foreach ($primary_key as $column)
   {
-    $stmt->column(DB::column($column)->integer());
+    $table->integer($column);
   }
 
-  $stmt();
+  $table();
 
 }
 
@@ -82,5 +77,5 @@ function insert(
   array $values
 ): void
 {
-  DB::insert()->into($table)->values($values)();
+  DB::insert($table)->values($values)();
 }
