@@ -361,15 +361,3 @@ it('can fail to require refreshed record', function ()
 
 })
 ->throws(ModelNotFoundException::class);
-
-it('can use magic setter methods', function ()
-{
-
-  $test = new Test;
-
-  $test->upper_name = 'test';
-
-  expect($test->name)
-  ->toBe('TEST');
-
-});

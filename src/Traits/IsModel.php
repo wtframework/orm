@@ -210,11 +210,6 @@ trait IsModel
       $this->data->$name = $value;
     }
 
-    else
-    {
-      $this->$method_name($value);
-    }
-
   }
 
   public function __get(string $name): mixed
